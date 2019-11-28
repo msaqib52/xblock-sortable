@@ -1,0 +1,9 @@
+/* CSS for SortableXBlock */
+
+.sortable_block .count {
+    font-weight: bold;
+}
+
+.sortable_block p {
+    cursor: pointer;
+}

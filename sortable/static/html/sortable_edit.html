@@ -1,0 +1,74 @@
+<div class="sortable_block editor-with-buttons">
+  <div class="wrapper-comp-settings is-active editor-with-buttons" id="settings-tab">
+    <ul class="list-input settings-list">
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting">
+          <label class="label setting-label">
+              <span>{{fields.display_name.display_name}}:</span>
+          </label>
+          <input class="input setting-input display-name" value="{{self.display_name}}" />
+        </div>
+        <span class="tip setting-help">{{fields.display_name.help}}</span>
+      </li>
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting">
+          <label class="label setting-label">
+            <span>{{fields.question_text.display_name}}:</span>
+          </label>
+           <textarea class="field-data-control question-text" rows=3 cols=70>{{self.question_text}}</textarea>
+        </div>
+        <span class="tip setting-help">{{fields.question_text.help}}</span>
+      </li>
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting">
+          <label class="label setting-label">
+              <span>{{fields.item_background_color.display_name}}:</span>
+          </label>
+          <input class="input setting-input item-background-color" value="{{self.item_background_color}}" />
+        </div>
+        <span class="tip setting-help">{{fields.item_background_color.help}}</span>
+      </li>
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting">
+          <label class="label setting-label">
+            <span>{{fields.max_attempts.display_name}}:</span>
+          </label>
+            <input class="input setting-input max-attempts"
+             type="number"
+             min="1"
+             step="1" 
+             value="{{self.max_attempts}}" />
+        </div>
+        <span class="tip setting-help">{{fields.max_attempts.help}}</span>
+      </li>
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting items-list">
+          <label class="label setting-label">
+            <span>{{fields.data.display_name}}:</span>
+          </label>
+           {% for item in data %}
+            <div class="item">
+              <span class="remove-item">&#10006;</span>
+              <span class="item-position">{{item.position}}</span>
+              <span class="item-text" contenteditable="true">{{item.text}}</span>
+            </div>
+           {% endfor %}
+        </div>
+        <span class="items-error">There should be atleast 2 items</span>
+        <button id="add-item">Add Item</button>
+        <span class="tip setting-help">{{fields.data.help}}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="xblock-actions">
+    <ul>
+      <li class="action-item">
+        <a href="#" class="button action-primary save-button">Save</a>
+      </li>
+
+      <li class="action-item">
+        <a href="#" class="button cancel-button">Cancel</a>
+      </li>
+    </ul>
+  </div>
+</div>

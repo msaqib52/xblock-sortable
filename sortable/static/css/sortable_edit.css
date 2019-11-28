@@ -1,0 +1,66 @@
+.sortable_block .items-list .item {
+  padding: 0;
+  margin: 0 auto;
+  width: 60%;
+}
+.sortable_block .items-list .item-text {
+  -moz-box-sizing: border-box !important;
+  -webkit-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+  display: block;
+  padding: 12px !important;
+  color: white;
+  background: #0075b4;
+  cursor: move;
+  outline: none;
+  border-radius: 2px;
+  margin: 4px !important;
+}
+.sortable_block .items-list .item-text:focus {
+  -moz-transition: background 0.1s ease-in;
+  -o-transition: background 0.1s ease-in;
+  -webkit-transition: background 0.1s ease-in;
+  transition: background 0.1s ease-in;
+  background: #0075b4;
+  cursor: text;
+}
+.sortable_block .items-list .item-text:focus:before {
+  -moz-transition: background 0.2s ease-in;
+  -o-transition: background 0.2s ease-in;
+  -webkit-transition: background 0.2s ease-in;
+  transition: background 0.2s ease-in;
+  display: block;
+  float: left;
+  content: "\270E";
+  color: white;
+  margin-right: 8px;
+}
+.sortable_block .items-list .remove-item {
+  float: right;
+  cursor: pointer;
+  margin: 12px !important;
+  color: #ffffff;
+}
+.sortable_block .items-list .item-position {
+  float: left;
+  margin: 0px 0px 0px -50px;
+  border: 2px solid;
+  padding: 11px;
+  border-radius: 2px;
+}
+.sortable_block #add-item {
+  display: block;
+  margin-left: 110px;
+  background: #0696e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 2px;
+  padding: 10px;
+  width: 100px;
+}
+.sortable_block .items-error {
+  margin-left: 110px;
+  color: red;
+  font-size: 12px;
+  display: none;
+}
