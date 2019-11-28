@@ -1,22 +1,30 @@
 /* Javascript for SortableXBlock. */
 function SortableXBlock(runtime, element) {
 
-    function updateCount(result) {
-        $('.count', element).text(result.count);
+    function getItemsState(result) {
+        var data = []
+        $('.item', element).each(function(index, item){
+            data.push($(item).data('position'));
+        });
+
+        return data
     }
 
-    var handlerUrl = runtime.handlerUrl(element, 'increment_count');
+    var handlerUrl = runtime.handlerUrl(element, 'submit_answer');
 
-    $('p', element).click(function(eventObject) {
+    $('#submit-answer', element).click(function(eventObject) {
         $.ajax({
             type: "POST",
             url: handlerUrl,
-            data: JSON.stringify({"hello": "world"}),
-            success: updateCount
+            data: JSON.stringify(getItemsState()),
+            success: function(response) {
+                alert(response.correct);
+            }
         });
     });
 
     $(function ($) {
-        /* Here's where you'd do things on page load. */
+        $('.items-list').sortable();
+
     });
 }

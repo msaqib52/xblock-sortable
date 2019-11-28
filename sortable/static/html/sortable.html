@@ -1,3 +1,9 @@
 <div class="sortable_block">
-
+	<div>{{self.question_text}}</div>
+	<ul class="items-list">
+		{% for item in items %}
+			<li class="item" style="background: {{self.item_background_color}}" data-position="{{item.position}}">{{item.text}}</li>
+		{% endfor %}
+	</ul>
+    <button id="submit-answer">Submit</button>	
 </div>

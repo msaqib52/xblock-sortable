@@ -4,6 +4,24 @@
     font-weight: bold;
 }
 
-.sortable_block p {
-    cursor: pointer;
+.sortable_block .items-list li {
+  -moz-box-sizing: border-box !important;
+  -webkit-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+  display: block;
+  padding: 12px !important;
+  color: white;
+  background: #0075b4;
+  cursor: move;
+  outline: none;
+  border-radius: 2px;
+  margin: 4px !important;
+}
+
+.sortable_block #submit-answer{
+  background: #0696e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 2px;
+  padding: 10px;
 }

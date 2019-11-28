@@ -3,14 +3,14 @@ function SortableXBlockEdit(runtime, element) {
     var $element = $(element);
 
 	function updateItemsOrder() {
-		$('.item').each(function(index, item){
+		$('.item', element).each(function(index, item){
 			$(item).find('.item-position').html(++index);
 		});
 	}
 
 	function getItemsWithOrder() {
 		var data = []
-		$('.item').each(function(index, item){
+		$('.item', element).each(function(index, item){
 			var position = $(item).find('.item-position').html();
 			var text = $(item).find('.item-text').html();
 
@@ -33,7 +33,7 @@ function SortableXBlockEdit(runtime, element) {
 
     $element.on('click', '#add-item', function() {
     	var itemHtml = '<div class="item"><span class="remove-item">&#10006;</span><span class="item-position"></span><span class="item-text" contenteditable="true">New item</span>';
-        $('.items-list').append(itemHtml);
+        $('.items-list', element).append(itemHtml);
         updateItemsOrder();
     });
 

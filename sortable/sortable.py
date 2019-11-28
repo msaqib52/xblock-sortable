@@ -2,6 +2,7 @@
 import json
 import urllib
 import pkg_resources
+import random
 from xblock.core import XBlock
 from xblock.fields import Integer, Scope, String, List
 from xblock.fragment import Fragment
@@ -109,14 +110,36 @@ class SortableXBlock(XBlock):
         The primary view of the SortableXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/sortable.html")
-        frag = Fragment(html.format(self=self))
+        frag = Fragment()
+        items = self.data[:]
+        random.shuffle(items)
+        frag.add_content(loader.render_django_template(
+            'static/html/sortable.html',
+            context=dict(items=items, self=self),
+            i18n_service=self.i18n_service)
+        )
         frag.add_css(self.resource_string("static/css/sortable.css"))
+        frag.add_javascript(self.resource_string("static/js/vendor/jquery-sortable.js"))
         frag.add_javascript(self.resource_string("static/js/src/sortable.js"))
-        frag.add_javascript_url(url='//cdn.jsdelivr.net/npm/sortablejs@1.10.1/Sortable.min.js')
 
         frag.initialize_js('SortableXBlock')
         return frag
+
+    @XBlock.json_handler
+    def submit_answer(self, data, suffix=''):
+        """
+        Checks submitted solution and returns feedback.
+        """
+        self.attempts += 1
+        correct = False
+        assert len(data) == len(self.data)
+        for index, item in enumerate(self.data):
+            correct = (int(item['position']) == data[index])
+
+        return {
+            'correct': correct,
+            'attempts': self.attempts,
+        }
 
     def studio_view(self, context):
         """
