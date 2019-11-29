@@ -1,9 +1,18 @@
 <div class="sortable_block">
-	<div>{{self.question_text}}</div>
+	<p>{{self.question_text}}</p>
 	<ul class="items-list">
 		{% for item in items %}
-			<li class="item" style="background: {{self.item_background_color}}" data-position="{{item.position}}">{{item.text}}</li>
+			<li class="item" style="background: {{self.item_background_color}}; color: {{self.item_text_color}}" data-position="{{item.position}}">{{item.text}}</li>
 		{% endfor %}
 	</ul>
-    <button id="submit-answer">Submit</button>	
+    <button id="submit-answer" {% if self.remaining_attempts == 0 or self.completed %}disabled{% endif %}>Submit</button>
+    <div class="feedback">
+    	<div class="message {% if self.completed %}correct{% endif %}" style="{% if self.completed %}display: block;{% endif %}">
+    		{% if self.completed %}
+    			Congratulations, Your answer is correct!
+    		{% endif %}
+    	</div>
+    	<div class="remaining-attempts">Remaining attempts: <span class="count">{{self.remaining_attempts}}</span></div>
+    	<div class="max-attempts">Maximum attempts allowed: {{self.max_attempts}}</div>
+    </div>
 </div>

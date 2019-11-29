@@ -4,7 +4,8 @@ import urllib
 import pkg_resources
 import random
 from xblock.core import XBlock
-from xblock.fields import Integer, Scope, String, List
+from xblock.exceptions import JsonHandlerError
+from xblock.fields import Integer, Scope, String, List, Boolean
 from xblock.fragment import Fragment
 
 from xblockutils.resources import ResourceLoader
@@ -47,6 +48,7 @@ class SortableXBlock(XBlock):
         {'position': 5, 'text': "Item at position 5"},
     ]
 
+    has_score = True
 
     display_name = String(
         display_name=_("Title"),
@@ -90,6 +92,21 @@ class SortableXBlock(XBlock):
         enforce_type=True,
     )
 
+    item_text_color = String(
+        display_name=_("Item text color"),
+        help=_("The text color of sortable items"),
+        scope=Scope.settings,
+        default="#ffffff",
+        enforce_type=True,
+    )
+
+    completed = Boolean(
+        help=_("Indicates whether a learner has completed the problem successfully at least once"),
+        scope=Scope.user_state,
+        default=False,
+        enforce_type=True,
+    )
+
     data = List(
         display_name=_("Sortable Items"),
         help=_(
@@ -99,6 +116,11 @@ class SortableXBlock(XBlock):
         default=DEFAULT_DATA,
         enforce_type=True,
     )
+
+    @property
+    def remaining_attempts(self):
+        return self.max_attempts - self.attempts
+    
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -112,7 +134,8 @@ class SortableXBlock(XBlock):
         """
         frag = Fragment()
         items = self.data[:]
-        random.shuffle(items)
+        if not self.completed:
+            random.shuffle(items)
         frag.add_content(loader.render_django_template(
             'static/html/sortable.html',
             context=dict(items=items, self=self),
@@ -130,15 +153,23 @@ class SortableXBlock(XBlock):
         """
         Checks submitted solution and returns feedback.
         """
-        self.attempts += 1
-        correct = False
-        assert len(data) == len(self.data)
-        for index, item in enumerate(self.data):
-            correct = (int(item['position']) == data[index])
+        if self.remaining_attempts == 0:
+            raise JsonHandlerError(409, "Max number of attempts reached")
 
+        self.attempts += 1
+        self.runtime.publish(self, "progress", {})
+        correct = (data == [int(item['position']) for item in self.data])
+        if correct:
+            self.completed = True
+            self.runtime.publish(self, "grade", {'value': 1.0, 'max_value': 1.0})
+            feedback_message = 'Congratulations, Your answer is correct!'
+        else:
+            feedback_message = 'Incorrect answer!'
+        
         return {
             'correct': correct,
-            'attempts': self.attempts,
+            'remaining_attempts': self.remaining_attempts,
+            'message': feedback_message,
         }
 
     def studio_view(self, context):
@@ -171,6 +202,7 @@ class SortableXBlock(XBlock):
         self.max_attempts = submissions['max_attempts']
         self.question_text = submissions['question_text']
         self.item_background_color = submissions['item_background_color']
+        self.item_text_color = submissions['item_text_color']
         self.data = submissions['data']
 
         return {

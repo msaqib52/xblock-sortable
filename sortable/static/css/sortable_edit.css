@@ -1,9 +1,9 @@
-.sortable_block_edit .items-list .item {
+.sortable_block_edit .items-list-edit .item {
   padding: 0;
   margin: 0 auto;
   width: 60%;
 }
-.sortable_block_edit .items-list .item-text {
+.sortable_block_edit .items-list-edit .item-text {
   -moz-box-sizing: border-box !important;
   -webkit-box-sizing: border-box !important;
   box-sizing: border-box !important;
@@ -16,7 +16,7 @@
   border-radius: 2px;
   margin: 4px !important;
 }
-.sortable_block_edit .items-list .item-text:focus {
+.sortable_block_edit .items-list-edit .item-text:focus {
   -moz-transition: background 0.1s ease-in;
   -o-transition: background 0.1s ease-in;
   -webkit-transition: background 0.1s ease-in;
@@ -24,7 +24,7 @@
   background: #0696e2;
   cursor: text;
 }
-.sortable_block_edit .items-list .item-text:focus:before {
+.sortable_block_edit .items-list-edit .item-text:focus:before {
   -moz-transition: background 0.2s ease-in;
   -o-transition: background 0.2s ease-in;
   -webkit-transition: background 0.2s ease-in;
@@ -35,13 +35,13 @@
   color: white;
   margin-right: 8px;
 }
-.sortable_block_edit .items-list .remove-item {
+.sortable_block_edit .items-list-edit .remove-item {
   float: right;
   cursor: pointer;
   margin: 12px !important;
   color: #ffffff;
 }
-.sortable_block_edit .items-list .item-position {
+.sortable_block_edit .items-list-edit .item-position {
   float: left;
   margin: 0px 0px 0px -50px;
   border: 2px solid;

@@ -10,7 +10,7 @@ function SortableXBlockEdit(runtime, element) {
 
 	function getItemsWithOrder() {
 		var data = []
-		$('.item', element).each(function(index, item){
+		$('.items-list-edit .item', element).each(function(index, item){
 			var position = $(item).find('.item-position').html();
 			var text = $(item).find('.item-text').html();
 
@@ -21,7 +21,7 @@ function SortableXBlockEdit(runtime, element) {
 	}
 
     $element.on('click', '.remove-item', function() {
-    	if($('.item').length < 3) {
+    	if($('.items-list-edit .item').length < 3) {
     		var $error = $element.find('.items-error');
     		setTimeout(function(){ $error.hide()}, 3000);
     		$error.show();
@@ -33,7 +33,7 @@ function SortableXBlockEdit(runtime, element) {
 
     $element.on('click', '#add-item', function() {
     	var itemHtml = '<div class="item"><span class="remove-item">&#10006;</span><span class="item-position"></span><span class="item-text" contenteditable="true">New item</span>';
-        $('.items-list', element).append(itemHtml);
+        $('.items-list-edit', element).append(itemHtml);
         updateItemsOrder();
     });
 
@@ -44,6 +44,7 @@ function SortableXBlockEdit(runtime, element) {
             'question_text': $element.find('.question-text').val(),
             'show_problem_header': $element.find('.show-problem-header').is(':checked'),
             'item_background_color': $element.find('.item-background-color').val(),
+            'item_text_color': $element.find('.item-text-color').val(),
             'data': getItemsWithOrder(),
         };
 

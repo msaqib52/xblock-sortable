@@ -1,7 +1,7 @@
 /* CSS for SortableXBlock */
 
-.sortable_block .count {
-    font-weight: bold;
+.sortable_block {
+  margin: 10px;
 }
 
 .sortable_block .items-list li {
@@ -18,10 +18,35 @@
   margin: 4px !important;
 }
 
+.sortable_block ul.items-list{
+  padding-inline-start: 0;
+}
+
 .sortable_block #submit-answer{
   background: #0696e2;
   color: #ffffff;
   border: none;
   border-radius: 2px;
   padding: 10px;
+}
+
+.sortable_block button:disabled, .sortable_block button[disabled] {
+  background-color: #999999 !important;
+  color: #fff !important;
+}
+
+
+.sortable_block .feedback .error {
+  color: red;
+  display: none;
+}
+
+.sortable_block .feedback .correct {
+  color: green;
+  display: none;
+}
+
+.sortable_block .feedback .incorrect {
+  color: orange;
+  display: none;
 }

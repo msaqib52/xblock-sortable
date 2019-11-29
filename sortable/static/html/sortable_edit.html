@@ -31,6 +31,15 @@
       <li class="field comp-setting-entry metadata_entry">
         <div class="wrapper-comp-setting">
           <label class="label setting-label">
+              <span>{{fields.item_text_color.display_name}}:</span>
+          </label>
+          <input class="input setting-input item-text-color" value="{{self.item_text_color}}" />
+        </div>
+        <span class="tip setting-help">{{fields.item_text_color.help}}</span>
+      </li>
+      <li class="field comp-setting-entry metadata_entry">
+        <div class="wrapper-comp-setting">
+          <label class="label setting-label">
             <span>{{fields.max_attempts.display_name}}:</span>
           </label>
             <input class="input setting-input max-attempts"
@@ -42,7 +51,7 @@
         <span class="tip setting-help">{{fields.max_attempts.help}}</span>
       </li>
       <li class="field comp-setting-entry metadata_entry">
-        <div class="wrapper-comp-setting items-list">
+        <div class="wrapper-comp-setting items-list-edit">
           <label class="label setting-label">
             <span>{{fields.data.display_name}}:</span>
           </label>
