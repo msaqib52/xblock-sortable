@@ -3,8 +3,8 @@ function SortableXBlock(runtime, element) {
 
     function getItemsState(result) {
         var data = []
-        $('.item', element).each(function(index, item){
-            data.push(parseInt($(item).data('position')));
+        $('.item', element).each(function(){
+            data.push($(this).text().trim());
         });
 
         return data

@@ -60,8 +60,8 @@
            {% for item in data %}
             <div class="item">
               <span class="remove-item">&#10006;</span>
-              <span class="item-position">{{item.position}}</span>
-              <span class="item-text" contenteditable="true">{{item.text}}</span>
+              <span class="item-position">{{forloop.counter}}</span>
+              <span class="item-text" contenteditable="true">{{item}}</span>
             </div>
            {% endfor %}
         </div>

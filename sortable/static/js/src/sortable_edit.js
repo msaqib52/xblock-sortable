@@ -8,13 +8,10 @@ function SortableXBlockEdit(runtime, element) {
 		});
 	}
 
-	function getItemsWithOrder() {
+	function getItems() {
 		var data = []
-		$('.items-list-edit .item', element).each(function(index, item){
-			var position = $(item).find('.item-position').html();
-			var text = $(item).find('.item-text').html();
-
-			data.push({'position': parseInt(position), 'text': text});
+		$('.items-list-edit .item', element).each(function(){
+			data.push($(this).find('.item-text').text().trim());
 		});
 
 		return data
@@ -45,7 +42,7 @@ function SortableXBlockEdit(runtime, element) {
             'show_problem_header': $element.find('.show-problem-header').is(':checked'),
             'item_background_color': $element.find('.item-background-color').val(),
             'item_text_color': $element.find('.item-text-color').val(),
-            'data': getItemsWithOrder(),
+            'data': getItems(),
         };
 
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');

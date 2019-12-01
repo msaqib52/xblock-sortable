@@ -19,13 +19,7 @@ class SortableXBlock(XBlock):
     An XBlock for sorting problems.
     """
     FEEDBACK_MESSAGES = [_('Incorrect answer!'), _('Congratulations, Your answer is correct!')]
-    DEFAULT_DATA = [
-        {'position': 1, 'text': "Australia"},
-        {'position': 2, 'text': "China"},
-        {'position': 3, 'text': "Finland"},
-        {'position': 4, 'text': "Pakistan"},
-        {'position': 5, 'text': "United States"},
-    ]
+    DEFAULT_DATA = ["Australia", "China", "Finland", "Pakistan", "United States"]
 
     has_score = True
 
@@ -129,7 +123,7 @@ class SortableXBlock(XBlock):
         assert len(submission) == len(self.data)
         correctly_placed = 0
         for index, item in enumerate(self.data):
-            if item['position'] == submission[index]:
+            if item == submission[index]:
                 correctly_placed += 1
         grade = correctly_placed / float(len(self.data))
         return grade
