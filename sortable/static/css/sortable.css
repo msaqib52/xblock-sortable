@@ -15,11 +15,12 @@
   cursor: move;
   outline: none;
   border-radius: 2px;
-  margin: 4px !important;
+  margin: 4px 0 !important;
 }
 
 .sortable_block ul.items-list{
   padding-inline-start: 0;
+  margin-left: 0;
 }
 
 .sortable_block #submit-answer{
