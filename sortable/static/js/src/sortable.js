@@ -4,7 +4,7 @@ function SortableXBlock(runtime, element) {
     function getItemsState(result) {
         var data = []
         $('.item', element).each(function(index, item){
-            data.push($(item).data('position'));
+            data.push(parseInt($(item).data('position')));
         });
 
         return data
@@ -55,6 +55,6 @@ function SortableXBlock(runtime, element) {
     });
 
     $(function ($) {
-        Sortable.create($('.items-list')[0]);
+        Sortable.create($('.items-list', element)[0]);
     });
 }

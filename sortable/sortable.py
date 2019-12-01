@@ -1,38 +1,16 @@
-"""TO-DO: Write a description of what this XBlock is."""
-import json
-import urllib
-import pkg_resources
+"""Sortable XBlock"""
 import random
+import pkg_resources
 from xblock.core import XBlock
 from xblock.exceptions import JsonHandlerError
 from xblock.fields import Integer, Scope, String, List, Boolean
 from xblock.fragment import Fragment
-
 from xblockutils.resources import ResourceLoader
+
+from .utils import _, DummyTranslationService
 
 
 loader = ResourceLoader(__name__)
-
-
-def _(text):
-    """no-op function to scrape strings for i18n"""
-    return text
-
-
-def ngettext_fallback(text_singular, text_plural, number):
-    """ Dummy `ngettext` replacement to make string extraction tools scrape strings marked for translation """
-    if number == 1:
-        return text_singular
-    else:
-        return text_plural
-
-
-class DummyTranslationService(object):
-    """
-    Dummy drop-in replacement for i18n XBlock service
-    """
-    gettext = _
-    ngettext = ngettext_fallback
 
 
 @XBlock.needs('i18n')
@@ -40,12 +18,13 @@ class SortableXBlock(XBlock):
     """
     An XBlock for sorting problems.
     """
+    FEEDBACK_MESSAGES = [_('Incorrect answer!'), _('Congratulations, Your answer is correct!')]
     DEFAULT_DATA = [
-        {'position': 1, 'text': "Item at position 1"},
-        {'position': 2, 'text': "Item at position 2"},
-        {'position': 3, 'text': "Item at position 3"},
-        {'position': 4, 'text': "Item at position 4"},
-        {'position': 5, 'text': "Item at position 5"},
+        {'position': 1, 'text': "Australia"},
+        {'position': 2, 'text': "China"},
+        {'position': 3, 'text': "Finland"},
+        {'position': 4, 'text': "Pakistan"},
+        {'position': 5, 'text': "United States"},
     ]
 
     has_score = True
@@ -62,7 +41,7 @@ class SortableXBlock(XBlock):
         display_name=_("Problem text"),
         help=_("The description of the problem or instructions shown to the learner."),
         scope=Scope.settings,
-        default="",
+        default=_("Sort the following country names in alphabetical order"),
         enforce_type=True,
     )
 
@@ -109,9 +88,7 @@ class SortableXBlock(XBlock):
 
     data = List(
         display_name=_("Sortable Items"),
-        help=_(
-            "Order will be randomized when presented to students"
-        ),
+        help=_("Order will be randomized when presented to students"),
         scope=Scope.content,
         default=DEFAULT_DATA,
         enforce_type=True,
@@ -119,10 +96,10 @@ class SortableXBlock(XBlock):
 
     @property
     def remaining_attempts(self):
+        """Remaining number of attempts"""
         return self.max_attempts - self.attempts
-    
 
-    def resource_string(self, path):
+    def resource_string(self, path):  # pylint: disable=no-self-use
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
@@ -139,37 +116,41 @@ class SortableXBlock(XBlock):
         frag.add_content(loader.render_django_template(
             'static/html/sortable.html',
             context=dict(items=items, self=self),
-            i18n_service=self.i18n_service)
-        )
+            i18n_service=self.i18n_service
+        ))
         frag.add_css(self.resource_string("static/css/sortable.css"))
-        frag.add_javascript(self.resource_string("static/js/vendor/jquery-sortable.js"))
+        frag.add_javascript(self.resource_string("static/js/vendor/sortable.min.js"))
         frag.add_javascript(self.resource_string("static/js/src/sortable.js"))
 
         frag.initialize_js('SortableXBlock')
         return frag
 
+    def _calculate_grade(self, submission):
+        assert len(submission) == len(self.data)
+        correctly_placed = 0
+        for index, item in enumerate(self.data):
+            if item['position'] == submission[index]:
+                correctly_placed += 1
+        grade = correctly_placed / float(len(self.data))
+        return grade
+
     @XBlock.json_handler
-    def submit_answer(self, data, suffix=''):
+    def submit_answer(self, submission, suffix=''):
         """
         Checks submitted solution and returns feedback.
         """
         if self.remaining_attempts == 0:
-            raise JsonHandlerError(409, "Max number of attempts reached")
-
+            raise JsonHandlerError(409, _("Max number of attempts reached"))
+        grade = self._calculate_grade(submission)
         self.attempts += 1
+        self.completed = bool(int(grade))
         self.runtime.publish(self, "progress", {})
-        correct = (data == [int(item['position']) for item in self.data])
-        if correct:
-            self.completed = True
-            self.runtime.publish(self, "grade", {'value': 1.0, 'max_value': 1.0})
-            feedback_message = 'Congratulations, Your answer is correct!'
-        else:
-            feedback_message = 'Incorrect answer!'
-        
+        self.runtime.publish(self, "grade", {'value': grade, 'max_value': 1.0})
+
         return {
-            'correct': correct,
+            'correct': int(grade),
             'remaining_attempts': self.remaining_attempts,
-            'message': feedback_message,
+            'message': SortableXBlock.FEEDBACK_MESSAGES[int(grade)],
         }
 
     def studio_view(self, context):
@@ -179,14 +160,14 @@ class SortableXBlock(XBlock):
         frag = Fragment()
         context = {
             'self': self,
-            'fields': self.fields, 
+            'fields': self.fields,
             'data': self.data,
         }
         frag.add_content(loader.render_django_template(
             'static/html/sortable_edit.html',
             context=context,
-            i18n_service=self.i18n_service)
-        )
+            i18n_service=self.i18n_service
+        ))
         frag.add_css(self.resource_string("static/css/sortable_edit.css"))
         frag.add_javascript(self.resource_string("static/js/src/sortable_edit.js"))
 
@@ -215,8 +196,7 @@ class SortableXBlock(XBlock):
         i18n_service = self.runtime.service(self, "i18n")
         if i18n_service:
             return i18n_service
-        else:
-            return DummyTranslationService()
+        return DummyTranslationService()
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.

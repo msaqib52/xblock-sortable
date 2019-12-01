@@ -14,7 +14,7 @@ function SortableXBlockEdit(runtime, element) {
 			var position = $(item).find('.item-position').html();
 			var text = $(item).find('.item-text').html();
 
-			data.push({'position': position, 'text': text});
+			data.push({'position': parseInt(position), 'text': text});
 		});
 
 		return data
